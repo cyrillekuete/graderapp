@@ -1,9 +1,18 @@
 package com.next.graderapp;
 
+import java.util.UUID;
+
+import jakarta.validation.constraints.NotBlank;
+
 public class Grade {
+
+    @NotBlank(message = "name cannot be blank")
     private String name;
+    @NotBlank(message = "subject cannot be blank")
     private String subject;
+    @Score(message = "Score must be a letter grade")
     private String score;
+    private String id;
 
     public String getName() {
         return this.name;
@@ -36,6 +45,16 @@ public class Grade {
     }
 
     public Grade() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }
