@@ -1,4 +1,4 @@
-package com.next.graderapp;
+package com.next.graderapp.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,49 +11,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.next.graderapp.Constants;
+import com.next.graderapp.Grade;
+import com.next.graderapp.repository.GradeRepository;
+import com.next.graderapp.service.GradeService;
+
 import jakarta.validation.Valid;
 
 @Controller
 public class GradeController {
-    List<Grade> studentGrades = new ArrayList<>();
+    GradeService gradeService = new GradeService();
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false) String id) {
 
-        int index = getGradeIndex(id);
-        model.addAttribute("grade",
-                index == Constants.NOT_FOUND ? new Grade() : studentGrades.get(index));
+        model.addAttribute("grade", gradeService.getGradeById(id));
+
         return "form";
     }
 
     @PostMapping("/handleSubmit")
     public String submitForm(@Valid Grade grade, BindingResult result) {
-        int index = getGradeIndex(grade.getId());
-
         if (result.hasErrors())
             return "form";
-        if (index == Constants.NOT_FOUND) {
-            studentGrades.add(grade);
+        gradeService.submitGrade(grade);
 
-        } else
-            studentGrades.set(index, grade);
-        studentGrades.add(grade);
         return "redirect:/grades";
 
     }
 
     @GetMapping("/grades")
     public String getGrades(Model model) {
-        model.addAttribute("grades", studentGrades);
+        model.addAttribute("grades", gradeService.getGrades());
         return "grades";
-    }
-
-    public Integer getGradeIndex(String id) {
-        for (int i = 0; i < studentGrades.size(); i++) {
-            if (studentGrades.get(i).getId().equals(id))
-                return i;
-        }
-        return Constants.NOT_FOUND;
     }
 
 }
