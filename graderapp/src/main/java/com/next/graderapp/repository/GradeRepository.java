@@ -3,8 +3,11 @@ package com.next.graderapp.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.next.graderapp.Grade;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import com.next.graderapp.Grade;
+@Repository
 public class GradeRepository {
 
     private List<Grade> studentGrades = new ArrayList<>();

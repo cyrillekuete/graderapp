@@ -2,13 +2,19 @@ package com.next.graderapp.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.next.graderapp.Constants;
 import com.next.graderapp.Grade;
 import com.next.graderapp.repository.GradeRepository;
 
+@Service
 public class GradeService {
 
-    GradeRepository gradeRepository = new GradeRepository();
+    @Autowired
+    GradeRepository gradeRepository;
 
     public Grade getGrade(int index) {
         return gradeRepository.getGrade(index);
@@ -42,9 +48,9 @@ public class GradeService {
 
     public void submitGrade(Grade grade) {
         int index = gretGradeIndex(grade.getId());
-        
+
         if (index == Constants.NOT_FOUND) {
-           addGrade(grade);
+            addGrade(grade);
 
         } else {
             updateGrade(grade, index);
